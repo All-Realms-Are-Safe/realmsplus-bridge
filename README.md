@@ -14,8 +14,6 @@
 ---
 
 ## Script Events Sent by the Bot (INBOUND)
-### `realmsplus:ready`
-Indicates that the bot has successfully joined the game and is ready for communication.
 
 ### `realmsplus:configUpdate`
 Sends JSON data to update the world database (`worldDB`).
@@ -52,7 +50,6 @@ bridge.outboundEvent({
 The **Bridge** class facilitates communication between the Minecraft world and the external bot. It includes event management, outbound messaging, and world data synchronization.
 
 ### Key Components
-- **BridgeSignal**: Manages custom event subscriptions and emissions.
 - **Bridge Class**:
   - Handles incoming script events.
   - Sends outbound events to the Realms+ bot.
