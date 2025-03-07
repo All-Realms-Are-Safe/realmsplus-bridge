@@ -1,0 +1,37 @@
+{
+	"messages_text": {
+		"type": "panel",
+		"size": [
+			"100%",
+			"100%c"
+		],
+		"$blocked_string": "Your message has been blocked.",
+		"$mute_string": "The 'mute' ability has been revoked from you",
+		"controls": [
+			{
+				"text": {
+					"type": "label",
+					"color": "$chat_text_color",
+					"localize": false,
+					"enable_profanity_filter": true,
+					"size": [
+						"100%",
+						"default"
+					],
+					"text": "#text",
+					"text_tts": "#text_tts",
+					"font_type": "$chat_font_type",
+					"font_scale_factor": "$chat_font_scale_factor",
+					"line_padding": "$chat_line_spacing"
+				}
+			}
+		],
+		"bindings": [
+			{
+			  "source_property_name": "(not (#text - $mute_string = ''))",
+			  "binding_type": "view",
+			  "target_property_name": "#visible"
+			}
+		]
+	}
+}
