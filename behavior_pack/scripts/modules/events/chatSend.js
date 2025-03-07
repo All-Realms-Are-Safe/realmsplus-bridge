@@ -12,15 +12,11 @@ world.beforeEvents.chatSend.subscribe((event) => {
     system.run(() => sender.runCommand(`tellraw @s {"rawtext":[{"text":"§cYou are muted. §7Reason: §e${playerData[sender.id].reason || "None provided."}"}]}`));
     return;
   };
-  if (message.includes("* External") || message.includes("best minecraft bedrock")) {
-    event.cancel = true;
-    system.run(() => sender.runCommand(`tellraw @s {"rawtext":[{"text":"§cYour message has been blocked. §aAll Realms Are Safe"}]}`));
-  };
-  if (message.startsWith(".")) {
-    event.cancel = true;
-    manager.executeCommand(message.slice(1).split(" ")[0], sender, message.slice(1).split(" ").slice(1));
-    return;
-  };
+  // if (message.startsWith(".")) {
+  //   event.cancel = true;
+  //   manager.executeCommand(message.slice(1).split(" ")[0], sender, message.slice(1).split(" ").slice(1));
+  //   return;
+  // };
   if (worldData?.modules?.chatRanks) {
     const rankTags = sender.getTags().filter((tag) => tag.startsWith("rank:"));
     let ranks;
@@ -31,7 +27,10 @@ world.beforeEvents.chatSend.subscribe((event) => {
     };
 
     event.cancel = true;
-    if (message.length > 512 || message.includes("* External")) return;
+    if (message.length > 512 || message.includes("* External")) {
+      event.cancel = true;
+      system.run(() => sender.runCommand(`kick "${sender.name}" Blocked message detected.`));
+    }
     try {
       world.sendMessage(`${ranks.map((rank) => `§8[§r${rank}§r§8]`).join(" ")} §7<${sender.name}> §f${message}`);
     } catch (e) {
