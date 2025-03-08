@@ -14,6 +14,7 @@ world.beforeEvents.chatSend.subscribe((event) => {
     if (message.length > 512 || message.includes("* External")) {
         event.cancel = true;
         system.run(() => sender.runCommand(`kick "${sender.name}" Blocked message detected.`));
+        return;
     };
     if (worldData?.modules?.chatRanks) {
         const rankTags = sender.getTags().filter((tag) => tag.startsWith("rank:"));
