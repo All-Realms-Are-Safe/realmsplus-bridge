@@ -27,7 +27,7 @@ world.afterEvents.entityHitEntity.subscribe((event) => {
 export function getPlayerCPS(player) {
     const entry = cpsRecord.get(player.id);
     if (!entry) return 0;
-    const elapsedTime = (Date.now() - entry.lastUpdate) / 1000;
-    if (elapsedTime === 0) return entry.count;
-    return (entry.count / elapsedTime).toFixed(2);
+    const now = Date.now();
+    if (now - entry.lastUpdate > duration) return 0;
+    return entry.count;
 };
