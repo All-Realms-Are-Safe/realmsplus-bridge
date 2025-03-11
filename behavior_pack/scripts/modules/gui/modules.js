@@ -15,8 +15,8 @@ export function showModulesMenu(player) {
         worldDB.writeStorage("worldDB", {
             ...worldData,
             modules: {
-                chatRanks: r.formValues[0],
-                antiAutoClicker: r.formValues[1]
+                chatRanks: r.formValues[0] || false,
+                antiAutoClicker: r.formValues[1] || false
             }
         });
         showMainMenu(player);

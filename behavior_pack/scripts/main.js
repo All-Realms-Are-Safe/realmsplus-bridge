@@ -1,4 +1,4 @@
-import { world, system } from "@minecraft/server";
+import { world, system, EntityHealthComponent } from "@minecraft/server";
 import Bridge from "./modules/Bridge.js";
 const bridge = new Bridge();
 export { bridge };

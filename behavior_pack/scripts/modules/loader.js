@@ -12,17 +12,7 @@ const worldDB = new Database("worldDB", {
     }
 });
 
-const config = {
-    SCORES: {
-        spam: "spam"
-    }
-};
-
 playerDB.init();
 worldDB.init();
 
-export {
-    playerDB,
-    worldDB,
-    config
-};
+export { playerDB, worldDB };

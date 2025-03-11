@@ -1,4 +1,3 @@
-import { getInventoryContents } from "../utils/players.js";
 import { ModalFormData, ActionFormData } from "@minecraft/server-ui";
 import { world } from "@minecraft/server";
 import { showMainMenu } from "./home.js";

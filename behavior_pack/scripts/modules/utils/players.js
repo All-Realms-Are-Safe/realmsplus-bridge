@@ -29,7 +29,6 @@ function getInventoryContents(player) {
             return contents;
         };
     } catch (e) {
-        console.error("Error in getInventoryContents:", e);
         return [];
     };
 };
@@ -101,9 +100,7 @@ function updateModel(player) {
             };
             playerDB.writeStorage("playerDB", playerData);
         };
-    } catch (e) {
-        console.error("Error in updateModel:", e);
-    };
+    } catch (e) {};
 };
 
 export {
