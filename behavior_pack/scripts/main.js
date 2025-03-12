@@ -1,4 +1,4 @@
-import { world, system, EntityHealthComponent } from "@minecraft/server";
+import { world, system } from "@minecraft/server";
 import Bridge from "./modules/Bridge.js";
 const bridge = new Bridge();
 export { bridge };
@@ -6,6 +6,13 @@ export { bridge };
 system.runInterval(() => {
     bridge.syncWorld(world);
 }, 200);
+
+system.runInterval(() => {
+    for (const player of world.getPlayers()) {
+        const health = player.getComponent("minecraft:health");
+        player.nameTag = `${player.name}\n§c ${health.currentValue.toFixed(1)}`
+    };
+});
 
 system.beforeEvents.watchdogTerminate.subscribe((event) => {
     event.cancel = true;
@@ -15,7 +22,6 @@ system.beforeEvents.watchdogTerminate.subscribe((event) => {
 //                             Startup
 // -----------------------------------------------------------------
 import "./modules/loader.js";
-// import "./managers/CommandManager.js";
 
 // -----------------------------------------------------------------
 //                             Events
