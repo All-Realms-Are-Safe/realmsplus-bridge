@@ -19,6 +19,14 @@ You can find the latest version available for download [here](https://github.com
 - **Command Block Logging** - Notifies when and where a command block was placed in your world.
 
 ---
+## Setup + Requirements
+1. [Download](https://github.com/All-Realms-Are-Safe/realmsplus-bridge/releases) the latest release
+2. Apply the behavior/resource packs to your realm(s)
+    - Turn Beta API's on
+3. Configure the pack In Game or from Discord (if you're using our discord bot)
+    - In Game: give yourself `admin` tag, right click a compass
+    - Discord: `/config bridge` has all the config options
+---
 
 ## Script Events Sent by the Bot (INBOUND)
 
