@@ -1,10 +1,10 @@
 import { world, system } from "@minecraft/server";
 import { worldDB, playerDB } from "../loader.js";
 
-world.beforeEvents.chatSend.subscribe((event) => {
+world.beforeEvents.chatSend.subscribe(async (event) => {
     const { message, sender } = event;
     const worldData = worldDB.readStorage("worldDB");
-    let playerData = playerDB.readStorage("playerDB");
+    let playerData = await playerDB.readStorage("playerDB");
     if (!message || !sender) return;
     if (playerData[sender.id]?.muted) {
         event.cancel = true;
