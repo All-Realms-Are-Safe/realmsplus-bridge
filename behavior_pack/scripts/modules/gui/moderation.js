@@ -13,13 +13,13 @@ export function showModerationMenu(player) {
         .textField("Provide a reason (optional)", "")
         .submitButton("§l§aExecute");
 
-    form.show(player).then((r) => {
+    form.show(player).then(async (r) => {
         if (r.canceled) return;
         const target = players[r.formValues[0]];
         const action = r.formValues[1];
         const reason = r.formValues[2];
         if (!target) return;
-        let playerData = playerDB.readStorage("playerDB");
+        let playerData = await playerDB.readStorage("playerDB");
         switch (action) {
             case 0:
                 playerData[target.id] = {

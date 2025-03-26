@@ -11,7 +11,7 @@ export default class Bridge {
     constructor() {
         this._tag = "realmsplus";
         // Receives inbound events from Realms+
-        system.afterEvents.scriptEventReceive.subscribe((event) => {
+        system.afterEvents.scriptEventReceive.subscribe(async (event) => {
             switch (event.id) {
                 case "realmsplus:configUpdate":
                     const data = JSON.parse(event.message);
@@ -21,7 +21,7 @@ export default class Bridge {
                 case "realmsplus:lookupPlayer":
                     const playerName = event.message.replace(/"/g, "");
                     const player = world.getAllPlayers().find(p => p.name === playerName);
-                    const playerData = playerDB.readStorage("playerDB");
+                    const playerData = await playerDB.readStorage("playerDB");
                     this.outboundEvent({ eventId: "realmsplus.lookupPlayer", data: { message: playerData[player.id] } });
                     break;
             };
@@ -54,7 +54,7 @@ export default class Bridge {
      */
     async outboundEvent(packet) {
         const cleanedPacket = JSON.stringify(packet).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-        world.getDimension("overworld").runCommandAsync(`tellraw @a[tag=${this._tag}] {"rawtext":[{"text":"${cleanedPacket}"}]}`)
+        world.getDimension("overworld").runCommand(`tellraw @a[tag=${this._tag}] {"rawtext":[{"text":"${cleanedPacket}"}]}`)
         .catch((e) => {  });
     };
 };

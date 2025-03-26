@@ -59,9 +59,9 @@ function getHealth(player) {
  * Updates the stored player model with the latest data from the player.
  * @param {Player} player - The player to update
  */
-function updateModel(player) {
+async function updateModel(player) {
     try {
-        let playerData = playerDB.readStorage("playerDB");
+        let playerData = await playerDB.readStorage("playerDB");
         if (!playerData[player.id]?.id) {
             playerData[player.id] = {
                 name: player.name,
