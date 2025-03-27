@@ -8,23 +8,43 @@ import { updateModel } from "./utils/players";
  * - Sends/Receives events
  */
 export default class Bridge {
+    // -----------------------------------------------------------------
+    //                             Inbound Events
+    // -----------------------------------------------------------------
     constructor() {
         this._tag = "realmsplus";
-        // Receives inbound events from Realms+
         system.afterEvents.scriptEventReceive.subscribe(async (event) => {
-            switch (event.id) {
-                case "realmsplus:configUpdate":
-                    const data = JSON.parse(event.message);
-                    worldDB.writeStorage("worldDB", data);
-                    this.outboundEvent({ eventId: "realmsplus.configUpdate", data: { message: `config updated for ${data.name}` } });
-                    break;
-                case "realmsplus:lookupPlayer":
-                    const playerName = event.message.replace(/"/g, "");
-                    const player = world.getAllPlayers().find(p => p.name === playerName);
-                    const playerData = await playerDB.readStorage("playerDB");
-                    this.outboundEvent({ eventId: "realmsplus.lookupPlayer", data: { message: playerData[player.id] } });
-                    break;
-            };
+            try {
+                const payload = JSON.parse(event.message);
+                switch(event.id) {
+                    case "realmsplus:configUpdate":
+                        await worldDB.writeStorage("worldDB", payload?.data);
+                        this.outboundEvent({
+                            event: "realmsplus:configUpdate", 
+                            eventId: payload?.eventId, 
+                            data: { 
+                                message: `Config updated for ${payload?.data.name}` 
+                            } 
+                        });
+                        break;
+                    case "realmsplus:lookupPlayer":
+                        const eventId = payload?.eventId;
+                        const playerName = payload?.data?.playerName;
+                        const player = world.getAllPlayers().find(p => p.name === playerName);
+                        const playerData = await playerDB.readStorage("playerDB");
+                        this.outboundEvent({ 
+                            event: "realmsplus:lookupPlayer",
+                            event: eventId,
+                            data: {
+                                message: player ? playerData[player.id] : null 
+                            }
+                        });
+                        break;
+                    default:
+                        console.error(`[BridgeError]: Unknown event: ${payload?.event}`);
+                        break;
+                };
+            } catch (e) { console.error(e) };
         });
     };
 

@@ -1,10 +1,10 @@
 {
   "format_version": 2,
   "header": {
-    "name": "§aRealms§f+ §eBridge §8- §3v1.0.4",
+    "name": "§aRealms§f+ §eBridge §8- §6v1.1.0",
     "description": "§7World Integration for Realms+ Automod.",
-    "uuid": "087c21cc-d7c9-417f-b2ee-b675fa57f3d8",
-    "version": [1, 0, 4],
+    "uuid": "32179a9c-bd8b-490f-a553-646015434911",
+    "version": [1, 1, 0],
     "min_engine_version": [1, 16, 0]
   },
   "modules": [
@@ -12,7 +12,7 @@
       "description": "Main Module",
       "type": "script",
       "language": "javascript",
-      "uuid": "7d71c098-e4ab-4ed5-a1f3-be8bd32ee80c",
+      "uuid": "5a6a443d-bce7-4f36-89a6-f8a3f03def29",
       "version": [1, 0, 0],
       "entry": "scripts/main.js"
     }
