@@ -8,7 +8,6 @@ const worldDB = new Database("worldDB", {
     },
     modules: {
         chatRanks: false,
-        displayHealth: false,
         antiAutoClicker: false
     }
 });
