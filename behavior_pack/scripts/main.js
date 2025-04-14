@@ -12,7 +12,7 @@ system.runInterval(() => {
         const health = player.getComponent("minecraft:health");
         player.nameTag = `${player.name}\n§c ${health.currentValue.toFixed(1)}`
     };
-});
+}, 5);
 
 system.beforeEvents.watchdogTerminate.subscribe((event) => {
     event.cancel = true;

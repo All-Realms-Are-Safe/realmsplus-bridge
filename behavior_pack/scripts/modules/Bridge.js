@@ -29,7 +29,7 @@ export default class Bridge {
                         break;
                     case "realmsplus:lookupPlayer":
                         const eventId = payload?.eventId;
-                        const playerName = payload?.data?.playerName;
+                        const playerName = payload?.data?.username;
                         const player = world.getAllPlayers().find(p => p.name === playerName);
                         const playerData = await playerDB.readStorage("playerDB");
                         this.outboundEvent({ 
@@ -40,9 +40,7 @@ export default class Bridge {
                             }
                         });
                         break;
-                    default:
-                        console.error(`[BridgeError]: Unknown event: ${payload?.event}`);
-                        break;
+                    default: console.error(`[BridgeError]: Unknown event: ${payload?.event}`); break;
                 };
             } catch (e) { console.error(e) };
         });
@@ -73,8 +71,9 @@ export default class Bridge {
      * @param {object} packet - The JSON event data to send
      */
     async outboundEvent(packet) {
-        const cleanedPacket = JSON.stringify(packet).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-        world.getDimension("overworld").runCommand(`tellraw @a[tag=${this._tag}] {"rawtext":[{"text":"${cleanedPacket}"}]}`)
-        .catch((e) => {  });
+        try {
+            const cleanedPacket = JSON.stringify(packet).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            world.getDimension("overworld").runCommand(`tellraw @a[tag=${this._tag}] {"rawtext":[{"text":"${cleanedPacket}"}]}`);
+        } catch { };
     };
 };
