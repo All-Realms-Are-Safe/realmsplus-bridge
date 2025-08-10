@@ -1,5 +1,5 @@
 import { world } from "@minecraft/server";
-await null;
+
 /**
  * World Database Management
  */

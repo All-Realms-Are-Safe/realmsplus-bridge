@@ -1,9 +1,9 @@
 {
   "format_version": 2,
   "header": {
-    "name": "§aRealms§f+ §eBridge §8- §6v1.1.0",
+    "name": "§aRealms§f+ §eBridge §8- §bv2.0.0",
     "description": "§7World Integration for Realms+ Automod.",
-    "uuid": "32179a9c-bd8b-490f-a553-646015434911",
+    "uuid": "57423876-cbd0-4097-93d9-5271eaee2389",
     "version": [1, 1, 0],
     "min_engine_version": [1, 16, 0]
   },
@@ -12,7 +12,7 @@
       "description": "Main Module",
       "type": "script",
       "language": "javascript",
-      "uuid": "5a6a443d-bce7-4f36-89a6-f8a3f03def29",
+      "uuid": "1f75f1a6-5cfb-4bb2-8a7b-bfb852eab789",
       "version": [1, 0, 0],
       "entry": "scripts/main.js"
     }
@@ -20,11 +20,11 @@
   "dependencies": [
     {
       "module_name": "@minecraft/server",
-      "version": "2.0.0-beta"
+      "version": "2.2.0-beta"
     },
     {
       "module_name": "@minecraft/server-ui",
-      "version": "2.0.0-beta"
+      "version": "2.1.0-beta"
     }
   ]
 }

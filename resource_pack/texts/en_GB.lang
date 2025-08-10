@@ -1,4 +1,0 @@
-commands.message.display.outgoing=§r§cNo targets matched selector
-commands.message.display.incoming=§r§cNo targets matched selector
-commands.scoreboard.objectives.list.entry=§f- %1$s: displays as '%2$s' and is type '%3$s'
-commands.scoreboard.players.list.player.entry=§f- %2$s: %1$d (%3$s)
