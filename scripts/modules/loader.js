@@ -8,13 +8,20 @@ world.afterEvents.worldLoad.subscribe(() => {
     worldDB = new Database("worldDB", {
         name: null,
         settings: {
-            cpsLimit: 50
+            cpsLimit: 50,
+            chat: {
+                separator: "§r§8] [§r",
+                defaultFormat: "§8[§r{RANKS}§r§8] §7<{USERNAME}> §f{message}",
+                customFormat: ""
+            }
         },
         modules: {
             chatRanks: false,
             antiAutoClicker: false
         }
     });
+
+    world.sendMessage(JSON.stringify(worldDB.readStorage("worldDB")))
 
     playerDB.init();
     worldDB.init();
