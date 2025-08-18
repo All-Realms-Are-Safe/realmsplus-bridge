@@ -38,7 +38,6 @@ world.beforeEvents.chatSend.subscribe(async (event) => {
         
         world.sendMessage(finalMessage);
     } else {
-        // Default chat format when chat ranks are disabled
         world.sendMessage(`§r<${sender.name}> ${message}`);
     }
 });

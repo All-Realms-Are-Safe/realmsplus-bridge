@@ -6,12 +6,12 @@ let playerDB, worldDB;
 world.afterEvents.worldLoad.subscribe(() => {
     playerDB = new Database("playerDB", {});
     worldDB = new Database("worldDB", {
-        name: null,
+        name: null, // data retrieved by bridge
         settings: {
-            cpsLimit: 50,
+            cpsLimit: 50, // basically turned off
             chat: {
-                separator: "§r§8] [§r",
-                defaultFormat: "§8[§r{RANKS}§r§8] §7<{USERNAME}> §f{message}",
+                separator: "§r§8] [§r", // separator between ranks
+                defaultFormat: "§8[§r{RANKS}§r§8] §7<{USERNAME}> §f{MESSAGE}",
                 customFormat: ""
             }
         },
@@ -20,8 +20,6 @@ world.afterEvents.worldLoad.subscribe(() => {
             antiAutoClicker: false
         }
     });
-
-    world.sendMessage(JSON.stringify(worldDB.readStorage("worldDB")))
 
     playerDB.init();
     worldDB.init();
