@@ -6,8 +6,8 @@ These are all **outbound events** sent to Realms+ by the pack
 
 `data` is an object with the following properties:
 
-> **eventId**      | true     | Name of the event thats being sent to the bot
-> **data**         | false    | Custom data object, this should be values you want the bot to have access to
+**eventId**      | true     | Name of the event thats being sent to the bot
+**data**         | false    | Custom data object, this should be values you want the bot to have access to
 ---
 
 `realmsplus.realmKick` - Kicks a player from the realm memberlist
