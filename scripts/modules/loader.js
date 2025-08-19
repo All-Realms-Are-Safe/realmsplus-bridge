@@ -1,6 +1,6 @@
 import { world, system } from "@minecraft/server";
-import { bridge } from "../main.js";
 import { Database } from "./Database.js";
+import { bridge } from "../main.js";
 
 export const CombatDB = {};
 
