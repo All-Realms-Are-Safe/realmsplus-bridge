@@ -22,7 +22,9 @@ world.afterEvents.worldLoad.subscribe(() => {
                 customFormat: ""
             },
             combat: { // anti combat log
-                interval: 10
+                interval: 10,
+                defaultMessage: "§cYou've been VERY bad and as a result you lost EVERY item in your inventory when you left >:(", // sent to players who clogged and rejoined
+                customMessage: ""
             }
         },
         modules: {

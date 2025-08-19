@@ -143,15 +143,22 @@ function showAntiAutoclickerMenu(player, worldData) {
 };
 
 function showAntiCombatLogMenu(player, worldData) {
+    const tip1 = "When enabled, this module will punish players who leave the game during combat.";
+    const tip2 = "This message is sent to the player who clogged upon rejoining the game.";
+
+    const message = worldData.settings.combat.customMessage || worldData.settings.combat.defaultMessage;
+
     const form = new ModalFormData()
         .title("§e§lModules §0- §bAnti Combatlog")
-        .toggle("§l§2Anti Combatlog", { defaultValue: worldData?.modules?.antiCombatLog || false })
+        .toggle("§l§2Anti Combatlog", { defaultValue: worldData?.modules?.antiCombatLog || false, tooltip: tip1 })
+        .textField("§2Combatlog Message", message, { defaultValue: message, tooltip: tip2 })
         .submitButton("§l§aSave");
 
     form.show(player).then((r) => {
         if (r.canceled) return;
 
         worldData.modules.antiCombatLog = r.formValues[0] || false;
+        worldData.settings.combat.customMessage = r.formValues[1] || "";
         worldDB.writeStorage("worldDB", worldData);
         showMainMenu(player);
         player.playSound("vr.stutterturn");

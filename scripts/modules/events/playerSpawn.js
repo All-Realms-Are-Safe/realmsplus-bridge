@@ -1,13 +1,16 @@
 import { world, system } from "@minecraft/server";
-import { CombatDB } from "../loader";
+import { CombatDB, worldDB } from "../loader";
 import { updateModel } from "../utils/players";
 
 world.afterEvents.playerSpawn.subscribe(({ player }) => {
     const combatData = CombatDB[player.id];
     if (!combatData || !combatData.clear) return;
 
+    const worldData = worldDB.readStorage("worldDB");
+    const message = worldData.settings.combat.customMessage || worldData.settings.combat.defaultMessage;
+
     player.runCommand("clear @s");
-    player.sendMessage("§cYou've been VERY bad and as a result you lost EVERY item in your inventory when you left >:(");
+    player.sendMessage(message);
     delete CombatDB[player.id];
 
     const currentLocation = player.location;
