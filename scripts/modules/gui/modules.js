@@ -9,6 +9,7 @@ export function showModulesMenu(player) {
         .button("§l§2Chat Ranks", "textures/ui/chat_send")
         .button("§l§2Nametags", "textures/items/name_tag")
         .button("§l§2Anti Auto Clicker", "textures/gui/newgui/mob_effects/bad_omen_effect")
+        .button("§l§2Anti Combat Log", "textures/items/diamond_sword")
         .button("§l§vBack", "textures/gui/controls/left");
 
     form.show(player).then((r) => {
@@ -27,11 +28,12 @@ export function showModulesMenu(player) {
                 player.playSound("vr.stutterturn");
                 break;
             case 3:
-                showMainMenu(player);
+                showAntiCombatLogMenu(player, worldData);
                 player.playSound("vr.stutterturn");
                 break;
             case 4:
-                showAntiCombatLogMenu(player, worldData);
+                showMainMenu(player);
+                player.playSound("vr.stutterturn");
                 break;
         }
     });

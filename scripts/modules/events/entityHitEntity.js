@@ -58,6 +58,9 @@ world.afterEvents.entityHurt.subscribe((event) => {
 });
 
 system.runInterval(() => {
+    const worldData = worldDB.readStorage("worldDB");
+    if (!worldData.modules.antiCombatLog) return;
+
     world.getPlayers().forEach((player) => {
         const combatData = CombatDB[player.id];
         if (!combatData) return;
@@ -79,7 +82,7 @@ system.runInterval(() => {
     });
 }, 20);
 
-world.afterEvents.entityDie.subscribe(({ damageSource: attacker, deadEntity: victim }) => {
+world.afterEvents.entityDie.subscribe(({ deadEntity: victim }) => {
     if (victim instanceof Player && CombatDB[victim.id]) {
         const combatData = CombatDB[victim.id];
         delete CombatDB[victim.id];
