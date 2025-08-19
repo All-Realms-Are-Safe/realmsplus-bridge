@@ -97,7 +97,7 @@ function worldTasks(db, playerDB) {
                 bridge.outboundEvent({
                     eventId: "realmsplus.playerAFK",
                     data: {
-                        name: player.name,
+                        username: player.name,
                     }
                 });
             };
