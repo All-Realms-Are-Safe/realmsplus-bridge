@@ -14,14 +14,14 @@ export function showMainMenu(player) {
         switch (r.selection) {
             case 0: 
                 showModerationMenu(player);
-                player.playSound("note.bassattack");
+                player.playSound("vr.stutterturn");
                 break;
             case 1: 
                 showModulesMenu(player); 
-                player.playSound("note.bassattack");
+                player.playSound("vr.stutterturn");
                 break;
             default: 
-                player.playSound("note.bassattack");
+                player.playSound("vr.stutterturn");
                 break;
         };
     });

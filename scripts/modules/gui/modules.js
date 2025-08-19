@@ -15,15 +15,21 @@ export function showModulesMenu(player) {
         switch (r.selection) {
             case 0:
                 showRanksMenu(player, worldData);
-                player.playSound("note.bassattack");
+                player.playSound("vr.stutterturn");
                 break;
             case 1:
-                showAntiAutoclickerMenu(player, worldData);
-                player.playSound("note.bassattack");
+                showNametagsMenu(player, worldData);
                 break;
             case 2:
+                showAntiAutoclickerMenu(player, worldData);
+                player.playSound("vr.stutterturn");
+                break;
+            case 3:
                 showMainMenu(player);
-                player.playSound("note.bassattack");
+                player.playSound("vr.stutterturn");
+                break;
+            case 4:
+                showAntiCombatLogMenu(player, worldData);
                 break;
         }
     });
@@ -57,7 +63,28 @@ function showRanksMenu(player, worldData) {
 
         worldDB.writeStorage("worldDB", worldData);
         showMainMenu(player);
-        player.playSound("note.bassattack");
+        player.playSound("vr.stutterturn");
+    });
+};
+
+function showNametagsMenu(player, worldData) {
+    const tip = 
+        "§3Variables§r\n\n" +
+        "§7{USERNAME} §8- §rplayer's username\n" +
+        "§7{HEALTH} §8- §rplayer's health";
+
+    const form = new ModalFormData()
+        .title("§e§lModules §0- §bNametags")
+        .textField("§2Nametag Format", worldData?.settings?.nametags?.defaultFormat, { defaultValue: worldData.settings.nametags.defaultFormat, tooltip: tip })
+
+    form.show(player).then((r) => {
+        if (r.canceled) return;
+
+        worldData.settings.nametags.customFormat = r.formValues[0] || "";
+
+        worldDB.writeStorage("worldDB", worldData);
+        showMainMenu(player);
+        player.playSound("vr.stutterturn");
     });
 };
 
@@ -102,6 +129,22 @@ function showAntiAutoclickerMenu(player, worldData) {
 
         worldDB.writeStorage("worldDB", worldData);
         showMainMenu(player);
-        player.playSound("note.bassattack");
+        player.playSound("vr.stutterturn");
+    });
+};
+
+function showAntiCombatLogMenu(player, worldData) {
+    const form = new ModalFormData()
+        .title("§e§lModules §0- §bAnti Combatlog")
+        .toggle("§l§2Anti Combatlog", { defaultValue: worldData?.modules?.antiCombatLog || false })
+        .submitButton("§l§aSave");
+
+    form.show(player).then((r) => {
+        if (r.canceled) return;
+
+        worldData.modules.antiCombatLog = r.formValues[0] || false;
+        worldDB.writeStorage("worldDB", worldData);
+        showMainMenu(player);
+        player.playSound("vr.stutterturn");
     });
 };

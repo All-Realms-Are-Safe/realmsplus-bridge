@@ -1,9 +1,11 @@
-import { Player, world } from "@minecraft/server";
-import { worldDB } from "../loader.js";
+import { hasTimerReachedEnd, setTimer, getTime } from "../utils/common.js";
+import { Player, world, system } from "@minecraft/server";
+import { worldDB, CombatDB } from "../loader.js";
 
 const cpsRecord = new Map();
 const duration = 1000;
 
+// Anti Auto Clicker
 world.afterEvents.entityHitEntity.subscribe((event) => {
     const { damagingEntity: attacker } = event;
     if (!(attacker instanceof Player)) return;
@@ -23,6 +25,80 @@ world.afterEvents.entityHitEntity.subscribe((event) => {
         world.sendMessage(`§8[§aRealms§f+§8] §l>> §r§e${attacker.name} §chas been kicked for Auto Clicker §8(§6${cps}§7 > §e${worldData.settings.cpsLimit}§8)`);
     };
 });
+
+// Anti Combat Log
+world.afterEvents.entityHurt.subscribe((event) => {
+    const attacker = event.damageSource.damagingEntity;
+    if (!(attacker instanceof Player)) return;
+    const victim = event.hurtEntity;
+    
+    if (victim instanceof Player) {
+        CombatDB[victim.id] = { 
+            involvedId: attacker.id,
+            incombat: true, 
+            timer: setTimer(60, "seconds"),
+            clear: false,
+            location: victim.location,
+            dimension: victim.dimension.id,
+            items: getPlayerItems(victim)
+        };
+    }
+    
+    if (attacker instanceof Player) {
+        CombatDB[attacker.id] = { 
+            involvedId: victim.id,
+            incombat: true, 
+            timer: setTimer(60, "seconds"),
+            clear: false,
+            location: attacker.location,
+            dimension: attacker.dimension.id,
+            items: getPlayerItems(attacker)
+        };
+    }
+});
+
+system.runInterval(() => {
+    world.getPlayers().forEach((player) => {
+        const combatData = CombatDB[player.id];
+        if (!combatData) return;
+
+        const remainingTime = getTime(combatData.timer).seconds;
+        player.onScreenDisplay.setActionBar(`§7Combat:§b ${remainingTime < 0 ? 0 : remainingTime}`);
+
+        if (hasTimerReachedEnd(combatData.timer.targetDate)) {
+            delete CombatDB[player.id];
+            return;
+        }
+
+        CombatDB[player.id] = {
+            ...combatData,
+            location: player.location,
+            dimension: player.dimension.id,
+            items: getPlayerItems(player)
+        };
+    });
+}, 20);
+
+world.afterEvents.entityDie.subscribe(({ damageSource: attacker, deadEntity: victim }) => {
+    if (victim instanceof Player && CombatDB[victim.id]) {
+        const combatData = CombatDB[victim.id];
+        delete CombatDB[victim.id];
+        delete CombatDB[combatData.involvedId];
+    };
+});
+
+function getPlayerItems(player) {
+    const inventory = player.getComponent("inventory").container;
+    const equipment = player.getComponent("minecraft:equippable");
+    return [
+        ...Array.from({ length: inventory.size })
+            .map((_, i) => inventory.getItem(i))
+            .filter(item => item !== undefined),
+        ...["Head", "Chest", "Legs", "Feet"]
+            .map(slot => equipment.getEquipment(slot))
+            .filter(item => item !== undefined)
+    ];
+};
 
 export function getPlayerCPS(player) {
     const entry = cpsRecord.get(player.id);
