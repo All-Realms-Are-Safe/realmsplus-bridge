@@ -26,6 +26,7 @@ world.afterEvents.worldLoad.subscribe(() => {
             }
         },
         modules: {
+            customNametags: true,
             chatRanks: false,
             antiAutoClicker: false,
             antiCombatLog: false
@@ -47,8 +48,9 @@ function worldTasks(db) {
     // Display Custom Nametags
     system.runInterval(() => {
         const worldData = db.readStorage("worldDB");
-        console.log(JSON.stringify(worldData));
+
         const format = worldData.settings.nametags.customFormat || worldData?.settings?.nametags?.defaultFormat;
+        
         for (const player of world.getPlayers()) {
             const health = player.getComponent("minecraft:health");
             const final = format.replaceAll(/\{(.+?)\}/gi, (_, key) => {
@@ -61,7 +63,11 @@ function worldTasks(db) {
                         return "";
                 }
             });
-            player.nameTag = final;
+            if (worldData.modules.customNametags) {
+                player.nameTag = final;
+            } else {
+                player.nameTag = player.name;
+            }
         };
     }, 5);
 };

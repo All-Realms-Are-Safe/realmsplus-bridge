@@ -7,6 +7,7 @@ export function showModulesMenu(player) {
     const form = new ActionFormData()
         .title("§l§2Realms§f+ §0- §eModules")
         .button("§l§2Chat Ranks", "textures/ui/chat_send")
+        .button("§l§2Nametags", "textures/items/name_tag")
         .button("§l§2Anti Auto Clicker", "textures/gui/newgui/mob_effects/bad_omen_effect")
         .button("§l§vBack", "textures/gui/controls/left");
 
@@ -19,6 +20,7 @@ export function showModulesMenu(player) {
                 break;
             case 1:
                 showNametagsMenu(player, worldData);
+                player.playSound("vr.stutterturn");
                 break;
             case 2:
                 showAntiAutoclickerMenu(player, worldData);
@@ -68,19 +70,24 @@ function showRanksMenu(player, worldData) {
 };
 
 function showNametagsMenu(player, worldData) {
-    const tip = 
+    const format = worldData.settings.nametags.customFormat || worldData?.settings?.nametags?.defaultFormat;
+    
+    const tip1 = "When enabled, this module will display custom nametags above player heads!";
+    const tip2 = 
         "§3Variables§r\n\n" +
         "§7{USERNAME} §8- §rplayer's username\n" +
         "§7{HEALTH} §8- §rplayer's health";
 
     const form = new ModalFormData()
         .title("§e§lModules §0- §bNametags")
-        .textField("§2Nametag Format", worldData?.settings?.nametags?.defaultFormat, { defaultValue: worldData.settings.nametags.defaultFormat, tooltip: tip })
+        .toggle("§l§2Nametags", { defaultValue: worldData.modules.customNametags || false, tooltip: tip1 })
+        .textField("§2Nametag Format", format, { defaultValue: format, tooltip: tip2 })
 
     form.show(player).then((r) => {
         if (r.canceled) return;
 
-        worldData.settings.nametags.customFormat = r.formValues[0] || "";
+        worldData.modules.customNametags = r.formValues[0] || false;
+        worldData.settings.nametags.customFormat = r.formValues[1] || "";
 
         worldDB.writeStorage("worldDB", worldData);
         showMainMenu(player);
