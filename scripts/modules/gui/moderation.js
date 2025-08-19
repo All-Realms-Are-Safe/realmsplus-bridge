@@ -44,6 +44,8 @@ export function showModerationMenu(player) {
                 player.playSound("note.bassattack");
                 break;
             case 2:
+                // TODO: update this to be more descriptive:
+                    // - Separate hotbar/equipment/inventory
                 const inventory = playerData[target.id].inventory
                     .filter(item => item.id !== null)
                     .map(item => `§8- §ex${item.count} §f${item.id.replace("minecraft:", "")} §8(§nSlot ${item.slot}§8)`)
