@@ -10,6 +10,7 @@ export function showModulesMenu(player) {
         .button("§l§2Nametags", "textures/items/name_tag")
         .button("§l§2Anti Auto Clicker", "textures/gui/newgui/mob_effects/bad_omen_effect")
         .button("§l§2Anti Combat Log", "textures/items/diamond_sword")
+        .button("§l§2Anti AFK", "textures/items/bed_red")
         .button("§l§vBack", "textures/gui/controls/left");
 
     form.show(player).then((r) => {
@@ -32,6 +33,10 @@ export function showModulesMenu(player) {
                 player.playSound("vr.stutterturn");
                 break;
             case 4:
+                showAntiAfkMenu(player, worldData);
+                player.playSound("vr.stutterturn");
+                break;
+            case 5:
                 showMainMenu(player);
                 player.playSound("vr.stutterturn");
                 break;
@@ -159,6 +164,29 @@ function showAntiCombatLogMenu(player, worldData) {
 
         worldData.modules.antiCombatLog = r.formValues[0] || false;
         worldData.settings.combat.customMessage = r.formValues[1] || "";
+        worldDB.writeStorage("worldDB", worldData);
+        showMainMenu(player);
+        player.playSound("vr.stutterturn");
+    });
+};
+
+function showAntiAfkMenu(player, worldData) {
+    const tip1 = "When enabled, this module will punish players who are AFK for over 30 minutes.";
+    const tip2 = "This message is shown to players on the kick screen.";
+
+    const message = worldData.settings.afk.customMessage || worldData.settings.afk.defaultMessage;
+
+    const form = new ModalFormData()
+        .title("§e§lModules §0- §bAnti AFK")
+        .toggle("§l§2Anti AFK", { defaultValue: worldData?.modules?.antiAfk || false, tooltip: tip1 })
+        .textField("§2AFK Message", message, { defaultValue: message, tooltip: tip2 })
+        .submitButton("§l§aSave");
+
+    form.show(player).then((r) => {
+        if (r.canceled) return;
+
+        worldData.modules.antiAfk = r.formValues[0] || false;
+        worldData.settings.afk.customMessage = r.formValues[1] || "";
         worldDB.writeStorage("worldDB", worldData);
         showMainMenu(player);
         player.playSound("vr.stutterturn");

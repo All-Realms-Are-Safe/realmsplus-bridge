@@ -25,23 +25,28 @@ world.afterEvents.worldLoad.subscribe(() => {
                 interval: 10,
                 defaultMessage: "§cYou've been VERY bad and as a result you lost EVERY item in your inventory when you left >:(", // sent to players who clogged and rejoined
                 customMessage: ""
+            },
+            afk: {
+                defaultMessage: "§cYou've been kicked for being AFK for over 30 minutes.",
+                customMessage: ""
             }
         },
         modules: {
             customNametags: true,
             chatRanks: false,
             antiAutoClicker: false,
-            antiCombatLog: false
+            antiCombatLog: false,
+            antiAfk: false
         }
     });
 
     playerDB.init();
     worldDB.init();
 
-    system.runTimeout(() => { worldTasks(worldDB); }, 40);
+    system.runTimeout(() => { worldTasks(worldDB, playerDB); }, 40);
 });
 
-function worldTasks(db) {
+function worldTasks(db, playerDB) {
     // Sync WorldDB
     system.runInterval(() => {
         bridge.syncWorld(world);
@@ -49,6 +54,7 @@ function worldTasks(db) {
 
     // Display Custom Nametags
     system.runInterval(() => {
+
         const worldData = db.readStorage("worldDB");
 
         const format = worldData.settings.nametags.customFormat || worldData?.settings?.nametags?.defaultFormat;
@@ -72,6 +78,24 @@ function worldTasks(db) {
             }
         };
     }, 5);
+
+    // Anti AFK
+    system.runInterval(() => {
+        const worldData = db.readStorage("worldDB");
+        if (!worldData.modules.antiAFK) return;
+
+        const players = world.getPlayers();
+        for (const player of players) {
+            const model = playerDB.readStorage(player.id);
+            const lastPos = model.location;
+            if (
+                lastPos.x.toFixed(0) === player.location.x.toFixed(0) && 
+                lastPos.z.toFixed(0) === player.location.z.toFixed(0)
+            ) {
+                player.runCommand(`kick "${player.name}" ${worldData.settings.afk.customMessage || worldData.settings.afk.defaultMessage}`);
+            };
+        };
+    }, 36000); // 30 minutes
 };
 
 export { playerDB, worldDB };
