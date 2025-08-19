@@ -12,7 +12,7 @@ world.afterEvents.worldLoad.subscribe(() => {
         name: null, // data retrieved by bridge
         settings: {
             nametags: {
-                defaultFormat: "§f{USERNAME}\n§c ${HEALTH}§r",
+                defaultFormat: "§f{USERNAME}\n§c {HEALTH}§r",
                 customFormat: ""
             },
             cpsLimit: 50, // anti autoclicker
@@ -35,18 +35,33 @@ world.afterEvents.worldLoad.subscribe(() => {
     playerDB.init();
     worldDB.init();
 
-    worldTasks(worldDB);
+    system.runTimeout(() => { worldTasks(worldDB); }, 40);
 });
 
 function worldTasks(db) {
+    // Sync WorldDB
     system.runInterval(() => {
         bridge.syncWorld(world);
     }, 200);
 
+    // Display Custom Nametags
     system.runInterval(() => {
+        const worldData = db.readStorage("worldDB");
+        console.log(JSON.stringify(worldData));
+        const format = worldData.settings.nametags.customFormat || worldData?.settings?.nametags?.defaultFormat;
         for (const player of world.getPlayers()) {
             const health = player.getComponent("minecraft:health");
-            player.nameTag = `${player.name}\n§c ${health.currentValue.toFixed(1)}`
+            const final = format.replaceAll(/\{(.+?)\}/gi, (_, key) => {
+                switch (key.toLowerCase()) {
+                    case "username":
+                        return player.name;
+                    case "health":
+                        return health.currentValue.toFixed(1);
+                    default:
+                        return "";
+                }
+            });
+            player.nameTag = final;
         };
     }, 5);
 };

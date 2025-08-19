@@ -14,12 +14,12 @@ export class Database {
      */
     init() {
         // FOR DEV
-        // this.writeStorage(this.name, this.defaultValue);
+        this.writeStorage(this.name, this.defaultValue);
         // FOR PRODUCTION
-        const existingData = this.readStorage(this.name);
-        if (!existingData || typeof existingData !== "object") {
-            this.writeStorage(this.name, this.defaultValue);
-        };
+        // const existingData = this.readStorage(this.name);
+        // if (!existingData || typeof existingData !== "object") {
+        //     this.writeStorage(this.name, this.defaultValue);
+        // };
     };
 
     /**
