@@ -1,69 +1,106 @@
-# Events
+# Realms+ Bridge - Outbound Events Documentation
 
-These are all **outbound events** sent to Realms+ by the pack
+## Overview
 
-## bridge.outboundEvent(data) 
+This document outlines the outbound event system for the Realms+ Bridge integration. Events are transmitted from the Minecraft world to the Realms+ backend service for processing and automation.
 
-`data` is an object with the following properties:
+## Event Structure
 
-**eventId**      | true     | Name of the event thats being sent to the bot
-**data**         | false    | Custom data object, this should be values you want the bot to have access to
----
+All outbound events utilize the following standardized format:
 
-`realmsplus.realmKick` - Kicks a player from the realm memberlist
+```js
+bridge.outboundEvent({
+    eventId: "string",      // Required: Event identifier
+    data: {}                // Optional: Event-specific payload data
+})
+```
+
+## Event Catalog
+
+`realmsplus.realmKick`
+Removes a player from the realm member list.
+
+Payload:
+
 ```js
 {
-    gamertag: "NoVa Gh0ul"
+    gamertag: "NoVa Gh0ul"  // Required: Xbox Live gamertag of player to kick
 }
 ```
 
-`realmsplus.realmBan` - Bans a player from the realm
+`realmsplus.realmBan`
+Bans a player from accessing the realm.
+
+Payload:
+
 ```js
 {
-    gamertag: "NoVa Gh0ul",
-    duration: 6000 // ms value
+    gamertag: "NoVa Gh0ul",  // Required: Xbox Live gamertag of player to ban
+    duration: 6000           // Optional: Ban duration in milliseconds (permanent if omitted)
 }
 ```
 
-`realmsplus.blockPlaced` - Triggered when a player places a command block down 
-```js
+`realmsplus.blockPlaced`
+Triggers when a player places a command block. Used for monitoring restricted block usage.
+
+Payload:
+
+```javascript
 {
-    username: "NoVa Gh0ul",
-    block: "minecraft:command_block",
-    location: { x: 0, y: 0, z: 0 },
-    dimension: "minecraft:overworld"
+    username: "NoVa Gh0ul",                 // Required: In-game username
+    block: "minecraft:command_block",       // Required: Block identifier
+    location: { x: 0, y: 0, z: 0 },        // Required: World coordinates
+    dimension: "minecraft:overworld"        // Required: Dimension identifier
 }
 ```
 
-`realmsplus.combatLog` - Triggered when a player leaves the game during combat
-```js
+`realmsplus.combatLog`
+Detects and reports players who disconnect during combat situations.
+
+Payload:
+
+```javascript
 {
-    victim: "Realms+ v4",
-    attacker: "NoVa Gh0ul",
-    itemCount: 23 // number of items the victim dropped/got cleared from their inventory
+    victim: "Realms+ v4",    // Required: Username of player who disconnected
+    attacker: "NoVa Gh0ul",  // Required: Username of combat participant
+    itemCount: 23            // Required: Number of items dropped/confiscated
 }
 ```
 
-`realmsplus.playerAFK` - Triggered when a player is afk for too long
-```js
+`realmsplus.playerAFK`
+Monitors player activity and detects extended AFK periods.
+
+Payload:
+
+```javascript
 {
-    username: "NoVa Gh0ul"
+    username: "NoVa Gh0ul"  // Required: Username of AFK player
 }
 ```
 
----
-## Responses
 
-`realmsplus.configUpdate` - Response to the config update request
-```js
+## Response Events
+
+`realmsplus.configUpdate`
+Acknowledgement of configuration update requests.
+
+Response Format:
+
+```javascript
 {
-    message: "Config updated for {WORLD_NAME}" | "Failed to update config for {WORLD_NAME}"
+    message: "Config updated for {WORLD_NAME}"  // Success message
+    // OR
+    message: "Failed to update config for {WORLD_NAME}"  // Error message
 }
 ```
 
-`realmsplus.lookupPlayer` - Response to the lookupPlayer request
-```js
+`realmsplus.lookupPlayer`
+Returns player data from the database in response to lookup requests.
+
+Response Format:
+
+```javascript
 {
-    message: player // returns player entry in playerDB if found, otherwise null
+    message: player  // Player database entry object if found, otherwise null
 }
 ```
