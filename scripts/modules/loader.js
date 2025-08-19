@@ -93,6 +93,13 @@ function worldTasks(db, playerDB) {
                 lastPos.z.toFixed(0) === player.location.z.toFixed(0)
             ) {
                 player.runCommand(`kick "${player.name}" ${worldData.settings.afk.customMessage || worldData.settings.afk.defaultMessage}`);
+
+                bridge.outboundEvent({
+                    eventId: "realmsplus.playerAFK",
+                    data: {
+                        name: player.name,
+                    }
+                });
             };
         };
     }, 36000); // 30 minutes
